@@ -1,0 +1,33 @@
+@startuml
+
+title
+ Registering a Pod with an Orchestrator
+end title
+
+autonumber "<b>(R0)"
+participant Institution as I
+participant orchestrator.kb.nl as O
+participant pod.kb.nl as Pod
+participant netwerkdigitaalerfgoed.nl as NDE
+
+
+I -> O : POST /inbox\n{ LDN Register pod.kb.nl }
+I <-- O : 201 Created\nLocation: orchestrator.kb.nl/inbox/5c6ca040
+
+O -[#0000FF]> O: Create index entry\nfor pod.kb.nl
+
+I -> O : POST /inbox\n{ LDN Add pod.kb.nl/policy.ttl }
+I <-- O : 201 Created\nLocation: pod.kb.nl/inbox/5c6ca040
+
+O -> Pod: GET /policy.ttl
+O <-- Pod: 200 OK
+O -[#0000FF]> O: Index pod.kb.nl/policy.ttl
+
+I -> O : POST /inbox\n{ LDN Add netwerkdigitaalerfgoed.nl/policy.ttl }
+I <-- O : 201 Created\nLocation: netwerkdigitaalerfgoed.nl/inbox/5c6ca040
+
+O -> NDE: GET /policy.ttl
+O <-- NDE: 200 OK
+O -[#0000FF]> O: Index netwerkdigitaalerfgoed.nl/policy.ttl
+
+@enduml

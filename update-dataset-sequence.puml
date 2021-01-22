@@ -1,0 +1,72 @@
+@startuml
+
+title
+ Updating a dataset in the Registry.
+end title
+
+
+autonumber "<b>(R0)"
+participant "Collections Management System" as CMS
+actor maintainer as Maintainer 
+participant Dashboard as D
+participant pod.kb.nl as Pod
+participant orchestrator.kb.nl as O
+participant registry.nde.nl as R
+
+autonumber stop
+Maintainer -[#0000FF]> CMS: Export new version of dataset
+CMS -[#0000FF]> CMS: Modify 'dataset.ttl'
+
+Maintainer -[#0000FF]> D: Revise 'dataset-description.ttl'
+D -> D: Modify 'dataset-description.ttl' for 'dataset.ttl'
+
+autonumber resume
+D -> Pod : PATCH /dataset.ttl\nContent-Type: text/ldpatch\n{ changes dataset.ttl }
+D <-- Pod : 401 Unauthorized\nWWW-Authenticate: Basic realm="Access to Pod"
+autonumber stop
+D <-[#0000FF]> Maintainer : Ask credentials
+
+D -> Pod : PATCH /dataset.ttl\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ changes dataset.ttl }
+D <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/dataset.ttl
+
+D -> Pod : PATCH /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ [timestamp] updated pod.kb.nl/dataset.ttl }
+D <-- Pod : 200 OK
+
+D -> Pod : PATCH /dataset-desc.ttl\nContent-Type: text/turtle\nAuthorization: <credentials>\n{ changes dataset-description.ttl }
+D <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/dataset-desc.ttl
+
+D -> Pod : PATCH /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ [timestamp] updated pod.kb.nl/dataset-desc.ttl }
+D <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/eventlog
+
+D -> O: POST /inbox\n{ LDN Dataset Updated "pod.kb.nl/dataset.ttl"\nwith description 'pod.kb.nl/dataset-desc.ttl' }
+D <-- O: 201 Created\nLocation: orchestrator.kb.nl/inbox/3
+
+autonumber stop
+O <-[#0000FF]> O: Retrieve actions for 'Dataset Updated' event
+
+autonumber resume
+O -> R: POST /inbox\n{ LDN Update "pod.kb.nl/dataset.ttl"\nwith description 'pod.kb.nl/dataset-desc.ttl' }
+O <-- R: 201 Created\nLocation: registry.nde.nl/inbox/1
+O -> Pod : PATCH /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ [timestamp] Requested registration: pod.kb.nl/dataset.ttl with registry.nde.nl }
+O <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/eventlog
+
+R -> Pod: GET /dataset-desc.ttl
+R <-- Pod : 401 Unauthorized\nWWW-Authenticate: Basic realm="Access to Pod"
+R -> Pod: GET /dataset-desc.ttl\nAuthorization: <registry_credentials>
+R <-- Pod: 200 OK
+
+autonumber stop
+R -[#0000FF]> R: Re-index 'dataset-desc.ttl'
+
+autonumber resume
+R -> O: POST /inbox\n{ LDN Updated registry for "pod.kb.nl/dataset.ttl" }
+R <-- O: 201 Created\nLocation: orchestrator.kb.nl/inbox/4
+
+autonumber stop
+R -[#0000FF]> R: Append eventlog:\n[timestamp] registry.nde.nl updated registration of pod.kb.nl/dataset.ttl
+
+autonumber resume
+O -> Pod : PATCH /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ [timestamp] registry.nde.nl updated registration of pod.kb.nl/dataset.ttl }
+O <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/eventlog
+
+@enduml
