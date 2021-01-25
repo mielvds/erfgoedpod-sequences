@@ -8,7 +8,7 @@ end title
 autonumber "<b>(R0)"
 participant "Collections Management System" as CMS
 actor maintainer as Maintainer 
-participant Dashboard as D
+participant dashboard.kb.nl as D
 participant pod.kb.nl as Pod
 participant orchestrator.kb.nl as O
 participant registry.nde.nl as R

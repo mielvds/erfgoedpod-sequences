@@ -1,0 +1,32 @@
+@startuml
+
+title
+ Registering a Cultural Heritage Institution with the Registry.
+end title
+
+autonumber "<b>(R0)"
+actor maintainer as Maintainer 
+participant dashboard.bk.nl as D
+participant kb.nl as WS
+participant registry.nde.nl as R
+participant pod.kb.nl as Pod
+participant orchestrator.kb.nl as O
+
+autonumber stop
+Maintainer -[#0000FF]> D: Describe organisation profile
+D -[#0000FF]> D: Create 'profile.ttl'
+D -[#0000FF]> WS: Publish 'profile.ttl as 'kb.nl#me'
+
+autonumber resume
+D -> R: POST /inbox\n{ LDN Register "kb.nl#me" }
+D <-- R: 201 Created\nLocation: orchestrator.kb.nl/inbox/1
+
+autonumber stop
+R -[#0000FF]> R: Index "kb.nl#me"
+
+autonumber resume
+R -> Pod: POST /inbox\n{ LDN Registered "kb.nl#me" }
+R <-- Pod: 201 Created\nLocation: pod.kb.nl/inbox/1
+
+
+@enduml

@@ -14,20 +14,27 @@ participant netwerkdigitaalerfgoed.nl as NDE
 I -> O : POST /inbox\n{ LDN Register pod.kb.nl }
 I <-- O : 201 Created\nLocation: orchestrator.kb.nl/inbox/5c6ca040
 
+autonumber stop
 O -[#0000FF]> O: Create index entry\nfor pod.kb.nl
 
+autonumber resume
 I -> O : POST /inbox\n{ LDN Add pod.kb.nl/policy.ttl }
 I <-- O : 201 Created\nLocation: pod.kb.nl/inbox/5c6ca040
 
 O -> Pod: GET /policy.ttl
 O <-- Pod: 200 OK
+
+autonumber stop
 O -[#0000FF]> O: Index pod.kb.nl/policy.ttl
 
+autonumber resume
 I -> O : POST /inbox\n{ LDN Add netwerkdigitaalerfgoed.nl/policy.ttl }
 I <-- O : 201 Created\nLocation: netwerkdigitaalerfgoed.nl/inbox/5c6ca040
 
 O -> NDE: GET /policy.ttl
 O <-- NDE: 200 OK
+
+autonumber stop
 O -[#0000FF]> O: Index netwerkdigitaalerfgoed.nl/policy.ttl
 
 @enduml
