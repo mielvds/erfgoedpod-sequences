@@ -5,28 +5,39 @@ title
 end title
 
 autonumber "<b>(R0)"
-actor maintainer as Maintainer 
-participant dashboard.bk.nl as D
+actor maintainer as M 
+participant Dashboard as D
 participant kb.nl as WS
 participant registry.nde.nl as R
 participant pod.kb.nl as Pod
-participant orchestrator.kb.nl as O
 
 autonumber stop
-Maintainer -[#0000FF]> D: Describe organisation profile
+M -[#0000FF]> D: Describe organisation profile
 D -[#0000FF]> D: Create 'profile.ttl'
-D -[#0000FF]> WS: Publish 'profile.ttl as 'kb.nl#me'
+D -[#0000FF]> WS: Publish 'profile.ttl as 'kb.nl#me'\nwith inbox 'pod.kb.nl/inbox'
 
+M -[#0000FF]> D: Start registration
 autonumber resume
-D -> R: POST /inbox\n{ LDN Register "kb.nl#me" }
-D <-- R: 201 Created\nLocation: orchestrator.kb.nl/inbox/1
+D -> R: POST /inbox\n{ LDN Register "kb.nl#me"  }
+D <-- R: 201 Created\nLocation: registry.kb.nl/inbox/1
 
 autonumber stop
 R -[#0000FF]> R: Index "kb.nl#me"
 
 autonumber resume
+R -> WS: HEAD #me
+R <-- WS: 200 OK\nLink: <pod.kb.nl/inbox>; rel="http://www.w3.org/ns/ldp#inbox"
+
 R -> Pod: POST /inbox\n{ LDN Registered "kb.nl#me" }
 R <-- Pod: 201 Created\nLocation: pod.kb.nl/inbox/1
+
+autonumber stop
+D -> Pod: GET /inbox
+D <-- Pod: 200 OK\n{ "contains": ["pod.kb.nl/inbox/1"] }
+
+D -> Pod: GET /inbox/1
+D <-- Pod: 200 OK\n{ LDN Registered "kb.nl#me" }
+D -[#0000FF]> M: Tell user that the organisation\nwas registered with registry.kb.nl/inbox/1
 
 
 @enduml

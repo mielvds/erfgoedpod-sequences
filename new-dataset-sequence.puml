@@ -6,9 +6,9 @@ end title
 
 
 autonumber "<b>(R0)"
-participant "Collections Management System" as CMS
-actor maintainer as Maintainer 
-participant dashboard.kb.nl as D
+participant "Collections\nManagement System" as CMS
+actor Maintainer as Maintainer 
+participant Dashboard as D
 participant pod.kb.nl as Pod
 participant orchestrator.kb.nl as O
 participant registry.nde.nl as R
@@ -20,13 +20,22 @@ CMS -[#0000FF]> CMS: Create 'dataset.ttl'
 Maintainer -[#0000FF]> D: Upload and\ndescribe 'dataset.ttl'
 D -> D: Create 'dataset-description.ttl' for 'dataset.ttl'
 
-autonumber resume
-D -> Pod : PUT /dataset.ttl\nContent-Type: text/turtle\n{ dataset.ttl }
+== Discover inbox & authentication ==
+
+autonumber resume  
+D -> Pod : HEAD /
 D <-- Pod : 401 Unauthorized\nWWW-Authenticate: Basic realm="Access to Pod"
+
 autonumber stop
 D <-[#0000FF]> Maintainer : Ask credentials
 
-D -> Pod : PUT /dataset.ttl\nContent-Type: text/turtle\nAuthorization: <credentials>\n{ dataset.ttl }
+autonumber resume
+D -> Pod : HEAD /\nAuthorization: <credentials>
+D <-- Pod: 200 OK\nLink: <pod.kb.nl/inbox>;\nrel="http://www.w3.org/ns/ldp#inbox"
+
+== Put dataset and description in pod ==
+
+D -> Pod : PUT /dataset.ttl\nContent-Type: text/turtle\n{ dataset.ttl }
 D <-- Pod : 201 Created\n Location: pod.kb.nl/dataset.ttl
 
 D -> Pod : PATCH /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ [timestamp] created pod.kb.nl/dataset.ttl }
@@ -37,6 +46,8 @@ D <-- Pod : 201 Created\n Location: pod.kb.nl/dataset-desc.ttl
 
 D -> Pod : PATCH /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ [timestamp] created pod.kb.nl/dataset-desc.ttl }
 D <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/eventlog
+
+== Inform orchestrator to execute policy ==
 
 D -> O: POST /inbox\n{ LDN Dataset Created "pod.kb.nl/dataset.ttl"\nwith description 'pod.kb.nl/dataset-desc.ttl' }
 D <-- O: 201 Created\nLocation: orchestrator.kb.nl/inbox/1

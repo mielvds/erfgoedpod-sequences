@@ -6,7 +6,7 @@ end title
 
 
 autonumber "<b>(R0)"
-participant "Collections Management System" as CMS
+participant "Collections\nManagement System" as CMS
 actor maintainer as Maintainer 
 participant Dashboard as D
 participant pod.kb.nl as Pod
@@ -17,12 +17,15 @@ autonumber stop
 Maintainer -[#0000FF]> CMS: Export new version of dataset
 CMS -[#0000FF]> CMS: Modify 'dataset.ttl'
 
+== Update dataset and description in pod ==
+
 Maintainer -[#0000FF]> D: Revise 'dataset-description.ttl'
 D -> D: Modify 'dataset-description.ttl' for 'dataset.ttl'
 
 autonumber resume
 D -> Pod : PATCH /dataset.ttl\nContent-Type: text/ldpatch\n{ changes dataset.ttl }
 D <-- Pod : 401 Unauthorized\nWWW-Authenticate: Basic realm="Access to Pod"
+
 autonumber stop
 D <-[#0000FF]> Maintainer : Ask credentials
 
@@ -37,6 +40,8 @@ D <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/dataset-desc.ttl
 
 D -> Pod : PATCH /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ [timestamp] updated pod.kb.nl/dataset-desc.ttl }
 D <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/eventlog
+
+== Inform orchestrator to execute policy ==
 
 D -> O: POST /inbox\n{ LDN Dataset Updated "pod.kb.nl/dataset.ttl"\nwith description 'pod.kb.nl/dataset-desc.ttl' }
 D <-- O: 201 Created\nLocation: orchestrator.kb.nl/inbox/3

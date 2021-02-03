@@ -1,0 +1,37 @@
+@startuml
+
+title
+ Initalize an Erfgoedpod
+end title
+
+
+autonumber "<b>(R0)"
+actor Maintainer as Maintainer 
+participant Dashboard as D
+participant pod.kb.nl as Pod
+
+autonumber stop
+Maintainer -[#0000FF]> D: Log into pod.kb.nl\nfor the first time
+
+== Discover inbox & authentication ==
+
+autonumber resume  
+D -> Pod : HEAD /
+D <-- Pod : 401 Unauthorized\nWWW-Authenticate: Basic realm="Access to Pod"
+
+autonumber stop
+D <-[#0000FF]> Maintainer : Ask credentials
+
+autonumber resume
+D -> Pod : HEAD /\nAuthorization: <credentials>
+D <-- Pod: 200 OK\nLink: <pod.kb.nl/inbox>;\nrel="http://www.w3.org/ns/ldp#inbox"
+
+== Initalize Cultural Heritage Pod == 
+
+D -> Pod : PUT /eventlog\nContent-Type: text/ldpatch\nAuthorization: <credentials>\n{ }
+D <-- Pod : 204 No Content\n Content-Location: pod.kb.nl/eventlog
+
+autonumber stop
+D -[#0000FF]> Maintainer : Show user that pod\nis initialization
+
+@enduml
