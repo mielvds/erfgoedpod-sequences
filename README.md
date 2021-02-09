@@ -42,16 +42,26 @@ Example:
 
 pod.kb.nl/eventlog
 
+```
 @prefix lode: <http://linkedevents.org/ontology/>.
 @prefix time: <http://www.w3.org/2006/time#>.
 
 _:1 a lode:Event;
-    lode:atTime 
+    lode:atTime [ 
+        a time:Instant; 
+        time:inXSDDateTimeStamp  2020-04-12T10:30:00+10:00 . 
+    ];
+    lode:involvedAgent <http://kb.nl#me>;
+    dc:description "Created pod.kb.nl/dataset.ttl".
 
-[timestamp] Created pod.kb.nl/dataset.ttl
-[timestamp] Created pod.kb.nl/dataset-desc.ttl
-[timestamp] Requested registration: pod.kb.nl/dataset.ttl with registry.nde.nl
-[timestamp] registry.nde.nl registered pod.kb.nl/dataset.ttl
+...
+```
+``` log
+[2020-04-12T10:30:00+10:00] Created pod.kb.nl/dataset.ttl
+[2020-04-12T11:30:00+10:00] Created pod.kb.nl/dataset-desc.ttl
+[2020-04-12T12:30:00+10:00] Requested registration: pod.kb.nl/dataset.ttl with registry.nde.nl
+[2020-04-12T13:30:00+10:00] registry.nde.nl registered pod.kb.nl/dataset.ttl
+```
 
 ## Sequences
 
