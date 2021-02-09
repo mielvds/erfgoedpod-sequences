@@ -1,4 +1,4 @@
-@startuml
+@startuml update-dataset
 
 title
  Updating a dataset in the Registry.

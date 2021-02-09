@@ -1,4 +1,4 @@
-@startuml
+@startuml register-with-orchestrator
 
 title
  Registering a Pod with an Orchestrator

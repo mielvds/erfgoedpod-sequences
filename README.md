@@ -1,8 +1,29 @@
+# HTTP sequences for Erfgoedpod
 
-![collection\nas](out/init-erfgoedpod/init-erfgoedpod.svg)
-![collection\nas](out/register-with-orchestrator/register-with-orchestrator.svg)
+_Run `./render.sh` to generate the diagrams locally_
 
-![collection\nas](out/new-organisation-registry/new-organisation-registry.svg)
-![collection\nas](out/new-dataset-sequence/new-dataset-sequence.svg)
-![collection\nas](out/update-dataset-sequence/update-dataset-sequence.svg)
+## Preliminaries
 
+
+
+## Sequences
+
+## Initialize a Cultural Heritage Pod
+
+![](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/mielvds/erfgoedpod-sequences/init-erfgoedpod.puml)
+
+## Register an Orchestrator for a Cultural Heritage Pod
+
+![](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/mielvds/erfgoedpod-sequences/register-with-orchestrator.puml)
+
+## Add a new Cultural Heritage Institution to the Registry
+
+![](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/mielvds/erfgoedpod-sequences/new-organisation-registry.puml)
+
+## Add a new Dataset to the Registry
+
+![](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/mielvds/erfgoedpod-sequences/new-dataset-sequence.puml)
+
+## Update a new Cultural Heritage Institution to the Registry
+
+![](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/mielvds/erfgoedpod-sequences/update-dataset-sequence.puml)
