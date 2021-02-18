@@ -63,24 +63,30 @@ _:1 a lode:Event;
 [2020-04-12T13:30:00+10:00] registry.nde.nl registered pod.kb.nl/dataset.ttl
 ```
 
-## Sequences
+### Policy
 
-## Initialize a Cultural Heritage Pod
+A policy is a configuration file with machine-readable business rules and is the driver for the Orchestrator component. It dictates what actions the Orchestrator should take when it is notified of an event (typically by an incoming Linked Data Notification).
+## Register-function API
+
+Read the [Register API specification](/api/api-ldn.md) for more detail on a Web _application programming interface_ (API) for NDE's Register that is aligned with the Solid protocol.
+## HTTP Sequences
+
+### Initialize a Cultural Heritage Pod
 
 ![init erfgoedpod](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/mielvds/erfgoedpod-sequences/main/init-erfgoedpod.puml)
 
-## Register an Orchestrator for a Cultural Heritage Pod
+### Register an Orchestrator for a Cultural Heritage Pod
 
 ![register with orchestrator](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/mielvds/erfgoedpod-sequences/main/register-with-orchestrator.puml)
 
-## Add a new Cultural Heritage Institution to the Registry
+### Add a new Cultural Heritage Institution to the Registry
 
 ![new organisation registry](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/mielvds/erfgoedpod-sequences/main/new-organisation-registry.puml)
 
-## Add a new Dataset to the Registry
+### Add a new Dataset to the Registry
 
 ![new dataset](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/mielvds/erfgoedpod-sequences/main/new-dataset.puml)
 
-## Update a new Cultural Heritage Institution to the Registry
+### Update a new Cultural Heritage Institution to the Registry
 
 ![update dataset](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/mielvds/erfgoedpod-sequences/main/update-dataset.puml)
