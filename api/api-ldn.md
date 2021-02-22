@@ -86,6 +86,26 @@ Content-Language | en
 
 ##### Body (example)
 
+###### With URL
+
+``` json
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "summary": "Koninklijke Bibliotheek announces Alba",
+  "type": "Add",
+  "actor": {
+    "@context": "https://schema.org/",
+    "@type": "Organization",
+    "name": "Koninklijke Bibliotheek",
+    "@id": "https://www.kb.nl/"
+  },
+  "object": "https://demo.netwerkdigitaalerfgoed.nl/datasets/kb/2.html",
+  "target": "https://demo.netwerkdigitaalerfgoed.nl/register-api",
+  "updated": "2021-01-28T19:56:20.114Z"
+}
+```
+
+###### Inline
 
 ``` json
 {
@@ -98,13 +118,82 @@ Content-Language | en
     "name": "Koninklijke Bibliotheek",
     "id": "https://www.kb.nl/"
   },
-  "object": "https://demo.netwerkdigitaalerfgoed.nl/datasets/kb/2.html",
+  "object": {
+    "@context": {
+      "@vocab": "http://schema.org/"
+    },
+    "@type": "Dataset",
+    "@id": "http://archief.io/id/B8CA13423A834E8CB9C23DF85F239E31",
+    "identifier": "http://archief.io/id/B8CA13423A834E8CB9C23DF85F239E31",
+    "name": "Voorbeeld dataset",
+    "description": "Door het formulier vooringevulde, vaste waarden om het testen te vereenvoudigen.",
+    "license": "http://creativecommons.org/publicdomain/zero/1.0/deed.nl",
+    "inLanguage": "nl-NL",
+    "creator": {
+      "@type": "Organization",
+      "name": "Omgevingsdienst Flevoland en Gooi en Vechtstreek",
+      "url": "http://standaarden.overheid.nl/owms/terms/odflgvs",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "name": "T. Ester",
+        "email": "voorbeeld@nde.nl",
+        "telephone": "088-1234567"
+      }
+    },
+    "publisher": {
+      "@id": "http://standaarden.overheid.nl/owms/terms/Nationaal_Archief",
+      "@type": "Organization",
+      "name": "Nationaal Archief",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "name": "T. Ester",
+        "email": "voorbeeld@nde.nl",
+        "telephone": "088-1234567"
+      }
+    },
+    "mainEntityOfPage": [
+      "https://demo.netwerkdigitaalerfgoed.nl/datasets/kb/2.html"
+    ],
+    "dateCreated": "2020-03-30T04:05",
+    "datePublished": "2020-03-30T04:05",
+    "dateModified": "2020-03-31T04:05",
+    "version": "4",
+    "keywords": [
+      "Test"
+    ],
+    "genre": [
+      "http://standaarden.overheid.nl/owms/terms/Kopen_en_verkopen"
+    ],
+    "citation": "Oorspronkelijk uit boek A uit archief B inventaris C",
+    "spatialCoverage": "Nederland",
+    "temporalCoverage": "1900-2000",
+    "includedInDataCatalog": {
+      "@type": "DataCatalog",
+      "url": "http://www.example.com/2"
+    },
+    "distribution": [
+      {
+        "@type": "DataDownload",
+        "contentUrl": "http://archief.io/dataset/B8CA13423A834E8CB9C23DF85F239E31",
+        "encodingFormat": [
+          "http://publications.europa.eu/resource/authority/file-type/RDF_TURTLE"
+        ],
+        "name": "http://netwerkdigitaalerfgoed.nl/def/soort#datadump",
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/deed.nl",
+        "description": "Heleboel triple statements",
+        "inLanguage": [
+          "en-US"
+        ],
+        "datePublished": "2020-03-27T04:05",
+        "dateModified": "2020-03-28T04:05",
+        "contentSize": "123456"
+      }
+    ]
+  },
   "target": "https://demo.netwerkdigitaalerfgoed.nl/register-api",
   "updated": "2021-01-28T19:56:20.114Z"
 }
 ```
-
-
 
 #### Response sync
 
@@ -269,44 +358,22 @@ Link | `<http://www.w3.org/ns/ldp#BasicContainer>; rel="type",<http://www.w3.org
 
 
 
-## Notifications send by the API
+## Notifications send by the Registry
 
 
-### 
 
-
-``` json
-{
-  "@context": "https://www.w3.org/ns/activitystreams",
-  "summary": "Koninklijke Bibliotheek announces Alba",
-  "type": "Accept",
-  "actor": {
-    "@context": "https://schema.org/",
-    "@type": "WebAPI",
-    "name": "Register API",
-    "id": "https://demo.netwerkdigitaalerfgoed.nl/register-api"
-  },
-  "object": "https://demo.netwerkdigitaalerfgoed.nl/datasets/kb/2.html",
-  "target": {
-    "@context": "https://schema.org/",
-    "@type": "Organization",
-    "name": "Koninklijke Bibliotheek",
-    "id": "https://www.kb.nl/"
-  },
-  "updated": "2021-01-28T19:56:20.114Z"
-}
-```
+### Inform party that dataset has been created
 
 ``` json
 {
   "@context": "https://www.w3.org/ns/activitystreams",
-  "summary": "Koninklijke Bibliotheek announces Alba",
+  "summary": "Registry has created dataset description for Alba from Koninklijke Bibliotheek.",
   "type": "Create",
   "actor": {
     "@context": "https://schema.org/",
     "@type": "WebAPI",
     "name": "Register API",
-    "id": "https://demo.netwerkdigitaalerfgoed.nl/register-api"
+    "@id": "https://demo.netwerkdigitaalerfgoed.nl/register-api"
   },
   "object": "https://demo.netwerkdigitaalerfgoed.nl/datasets/kb/2.html",
   "target": "https://www.kb.nl/",
